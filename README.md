@@ -1,1 +1,1 @@
-# rirc
+# Recipe Inventory Refrigerator Creator
