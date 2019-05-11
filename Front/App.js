@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {createBottomTabNavigator, createAppContainer} from 'react-navigation'
+import {createBottomTabNavigator, createAppContainer, createStackNavigator, createSwitchNavigator} from 'react-navigation'
 import MainScreen from './components/MainScreen'
 import InventoryScreen from './components/InventoryScreen'
 import SearchScreen from './components/SearchScreen'
+import RecipeScreen from './components/RecipeScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class App extends React.Component {
@@ -12,9 +13,9 @@ export default class App extends React.Component {
       <AppContainer />
     );
   }
-}
+} 
 
-const AppContainer = createAppContainer(createBottomTabNavigator({
+const TabNavigator = createBottomTabNavigator({
   Explore: {
     screen: MainScreen
   },
@@ -45,7 +46,29 @@ const AppContainer = createAppContainer(createBottomTabNavigator({
       }
     } 
 }
-))
+)
+
+const StackNavigator = createStackNavigator({
+  Explore: {
+    screen: TabNavigator
+  },
+  Recipe: {
+    screen: RecipeScreen
+  }
+}
+)
+
+const SwitchNavigator = createSwitchNavigator({
+  Tab: {
+    screen: TabNavigator
+  },
+  Stack: {
+    screen: StackNavigator
+  },
+  initialRouteName: "Tab"
+})
+
+const AppContainer = createAppContainer(SwitchNavigator)
 
 const styles = StyleSheet.create({
   container: {
