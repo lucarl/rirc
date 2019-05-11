@@ -42,7 +42,7 @@ class MainScreen extends React.Component {
         .then(function(responseJson){
             items = responseJson
         })
-        console.log("hello: " + items)
+        console.log("hello things: " + items)
         this.setState({
             inventory: items
         })
@@ -54,7 +54,7 @@ class MainScreen extends React.Component {
     }
 
     handleClick = (item, amount) => {
-        addItem(item, amount)
+        this.addItem(item, amount)
     }
 
     render() {
