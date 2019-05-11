@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput , StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native';
+import { TextInput , StyleSheet, View, Text, TouchableOpacity, KeyboardAvoidingView, ListView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+
 
 const apiData = {
     url: 'http://192.168.2.130:5000'
@@ -53,8 +54,9 @@ class MainScreen extends React.Component {
         console.log(this.state.inventory)
     }
 
-    handleClick = (item, amount) => {
-        addItem(item, amount)
+    handleClick = async (item, amount) => {
+        await this.addItem(item, amount)
+        this.retrieveItems()
     }
 
     render() {
@@ -68,7 +70,7 @@ class MainScreen extends React.Component {
                         }} placeholder = "Item to Add" onChangeText = {(text) => this.setState({
                             item: text
                         })}/>
-                        <TextInput keyboardType = 'numeric' placeholder = "0" onChangeText = {(text) => this.setState({
+                        <TextInput keyboardType = 'numeric' placeholder = "1" onChangeText = {(text) => this.setState({
                             amount: text
                         })}/>
                         <TouchableOpacity style={styles.footerHeight} onPress ={() => this.handleClick(this.state.item, this.state.amount)}>
@@ -83,23 +85,24 @@ class MainScreen extends React.Component {
             return (
                 <View style = {styles.container}>
                     <FlatList data = {this.state.inventory} renderItem={({item}) => 
-               <Text>{item.name}</Text>}/>
+               <Text>{item.name}</Text>} numColumns={3}/>
+                    <KeyboardAvoidingView  behavior="padding" enabled>
+                    <View style = {styles.bottomPos}>
                     
-                    <View style = {styles.footer}>
-                        <TextInput style={{
-                            padding: 10
-                        }} placeholder = "Item to Add" onChangeText = {(text) => this.setState({
+                        <TextInput style={
+                            styles.addItemInput
+                        } placeholder = "Add growseries" onChangeText = {(text) => this.setState({
                             item: text
                         })}/>
-                        <TextInput keyboardType = 'numeric' placeholder = "0" onChangeText = {(text) => this.setState({
+                        <TextInput style={styles.inputNum} keyboardType = 'numeric' placeholder = "1" onChangeText = {(text) => this.setState({
                             amount: text
                         })}/>
                         <TouchableOpacity style={styles.footerHeight} onPress ={() => this.handleClick(this.state.item, this.state.amount)}>
-                            <Text style={{
-                                fontSize: 16
-                            }} > Add To Fridge </Text>
+                            <Text style={styles.addButton} > + </Text>
                         </TouchableOpacity>
+
                     </View>
+                    </KeyboardAvoidingView>
                 </View>
             )
         }
@@ -112,14 +115,62 @@ export default MainScreen
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#ECECEC',
       flexDirection: 'column'
     },
     footer: {
         flex: 1,
         flexDirection: 'row'
     },
-    footerHeight: {
-        height: 20
-    }
+
+
+
+    bottomPos: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 32,
+        alignItems: 'flex-end'   
+      },
+
+
+    addItemInput: {
+        padding: 10,
+        fontSize: 32,
+        borderBottomColor: '#707070',
+        borderBottomWidth: 1,
+    
+        
+      },
+
+
+      inputNum:{
+        padding: 10,
+        fontSize: 32,
+        borderBottomColor: '#707070',
+        borderBottomWidth: 1,
+        marginLeft: 16
+        
+        
+      },
+
+
+      footerHeight: {
+        color: '#fff',
+        borderWidth:1,
+        borderColor:'rgba(0,0,0,0.2)',
+        justifyContent: 'center',
+        alignItems:'center',
+        width:42,
+        height:42,
+        backgroundColor:'#000',
+        borderRadius:50,
+        marginBottom:8,
+        marginLeft: 16
+    },
+
+      addButton:{
+        fontSize: 16,
+        color: '#fff',
+        justifyContent: 'center'
+      }
   });
