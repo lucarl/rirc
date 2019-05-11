@@ -50,11 +50,18 @@ def hello_world():
 
 @app.route('/missing-items-recipes')
 def missing_items_recipes():
-    #items = inventory.find()
+    items = inventory.find()
+    json_items = json.loads(dumps(items))
+
     response = requests.get(
           "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=5&ranking=1&ignorePantry=false&ingredients=apples%2Cflour%2Csugar",
           headers={'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
                    'X-RapidAPI-Key': '71514d66edmshcc790e119430cc2p1adc6ejsn0ce22b1c10fa'}
     ).json()
 
-    return jsonify(response[0]["id"])
+    objects = []
+    for object in response:
+        if object["missedIngredientCount"] > 0:
+            objects.append(object)
+
+    return jsonify(objects)
